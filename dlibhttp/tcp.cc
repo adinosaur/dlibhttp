@@ -7,6 +7,7 @@
 #include <sys/types.h>      //recv, send
 #include <sys/socket.h>     //recv, send
 #include <string>
+#include <vector>
 #include <iostream>
 #include "tcp.h"
 
@@ -65,8 +66,7 @@ string TCP::tcp_recv()
     while ((bytes_recv = recv(sockfd, buf, sizeof(buf) - 1, 0)) > 0)
     {
         buf[bytes_recv] = '\0';
-        //cout << buf << endl;
-        response.append(buf);
+        response.insert(response.size(), buf, bytes_recv);
     }
     return response;
 }

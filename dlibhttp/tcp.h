@@ -1,6 +1,7 @@
 #ifndef TCP_H
 #define TCP_H
 #include <string>
+#include <vector>
 
 #define DEST_PORT 80
 

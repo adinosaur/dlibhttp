@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <regex>
 #include "tcp.h"
 #include "httpRequest.h"
@@ -7,27 +8,12 @@
 using namespace std;
 
 
-string HttpRequest::gen_request_line()
-{
-    string r;
-    r.append(request_line[0]);
-    for (vector<string>::size_type i = 1; i != request_line.size(); ++i)
-    {
-        r.append(" ");
-        r.append(request_line[i]);
-    }
-    return r;
-}
-
 string HttpRequest::gen_request_header()
 {
     string r;
-    map<string, string>::iterator beg = request_heads.begin();
-    map<string, string>::iterator end = request_heads.end();
-    
-    for ( ;beg != end; ++beg)
+    for ( auto it : request_heads)
     {
-        r.append(beg->first + ": " + beg->second + "\r\n");
+        r.append(it.first + ": " + it.second + "\r\n");
     }
     r.append("\r\n");
     return r;
@@ -49,25 +35,22 @@ pair<std::string, std::string> HttpRequest::get_host_uri(string url)
 
 string HttpRequest::get(string url)
 {
-    pair<std::string, std::string> p = get_host_uri(url);
+    auto p = get_host_uri(url);
     string host = p.first;
     string uri = p.second;
     
+    add_header_fields("Host", host);
+    
     /* 构造请求 */
     string request;
+    ostringstream ss;
     
-    request_line.push_back("GET");
-    request_line.push_back(uri);
-    request_line.push_back("HTTP/1.1");
-    request_line.push_back("\r\n");
-    request.append(gen_request_line());
-    
-    add_header_fields("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36");
-    add_header_fields("Host", host);
-    add_header_fields("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+    /* request line */
+    ss << "GET " << uri << " HTTP/1.1\r\n";
+    request = ss.str();
     request.append(gen_request_header());
+    cout << request;
     
-    cout << request << endl;
     /* TCP连接 */
     TCP tcp(host);
     
