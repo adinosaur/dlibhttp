@@ -6,7 +6,7 @@
 
 using namespace std;
 
-HttpResponse::HttpResponse(string response)
+HttpResponse::HttpResponse(const string& response)
 {
     auto pos1 = response.find("\r\n");
     auto pos2 = response.find("\r\n\r\n", pos1);
@@ -17,17 +17,17 @@ HttpResponse::HttpResponse(string response)
         response_body.push_back(response[i]);
 }
 
-string HttpResponse::get_line()
+inline string HttpResponse::get_line()
 {
     return response_line;
 }
 
-string HttpResponse::get_header()
+inline string HttpResponse::get_header()
 {
     return response_header;
 }
 
-string HttpResponse::get_body()
+inline string HttpResponse::get_body()
 {
     return response_body;
 }

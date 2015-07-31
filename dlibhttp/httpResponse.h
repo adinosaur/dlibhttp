@@ -7,7 +7,7 @@
 
 class HttpResponse {
 public:
-    HttpResponse(std::string);
+    HttpResponse(const std::string&);
     std::string get_line();
     std::string get_header();
     std::string get_body();
