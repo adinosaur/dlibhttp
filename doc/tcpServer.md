@@ -1,6 +1,12 @@
-#tcp服务器
+#TcpServer
 
+##简介
 tcp服务器类，使用方法如test.cc文件。
+
+##编译
+```
+clang++-3.5 -std=c++11 tcpServer.cc test.cc -o tcpServer
+```
 
 ##使用
 ```
@@ -16,6 +22,3 @@ int main()
 telnet '127.0.0.1' 10000
 ```
 
-##编译
-```clang++-3.5 -std=c++11 tcpServer.cc test.cc -o tcpServer
-```
