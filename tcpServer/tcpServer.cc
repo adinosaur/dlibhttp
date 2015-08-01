@@ -48,9 +48,14 @@ int TcpServer::accept_from_socket() {
 
 void TcpServer::run() {
     while (1) {
+        // 刚开始简单地处理请求时阻塞其它请求
         int fd = accept_from_socket();
         __gnu_cxx::stdio_filebuf<char> filebuf1(fd, std::ios::in);
         __gnu_cxx::stdio_filebuf<char> filebuf2(fd, std::ios::out);
+
+        // 对每一次请求都申请一个istream对象和一个ostream对象
+        // 效率相对较低，但是不用自己维护IO流的错误
+        // 以后可考虑改写此处
         istream is(&filebuf1);
         ostream os(&filebuf2);
         handle(is, os);
@@ -58,8 +63,5 @@ void TcpServer::run() {
 }
 
 void TcpServer::handle(istream& is, ostream& os) {
-    string word;
-    while(is >> word) {
-        os << "enter: " << word << endl;
-    }
+    // virtual
 }

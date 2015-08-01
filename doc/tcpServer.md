@@ -10,10 +10,21 @@ clang++-3.5 -std=c++11 tcpServer.cc test.cc -o tcpServer
 
 ##使用
 ```
+class EchoTcpServer : public TcpServer{
+    public:
+        EchoTcpServer(unsigned int port):TcpServer(port) {}
+        virtual void handle(std::istream& is, std::ostream& os) {
+            string s;
+            while (is >> s){
+                os << s << endl;
+            }
+        }
+};
+
 int main()
 {
-    TcpServer tcpServer(PORT);
-    tcpServer.run();
+    shared_ptr<TcpServer> pTcpServer(new EchoTcpServer(10000));
+    pTcpServer->run();
     return 0;
 }
 ```
